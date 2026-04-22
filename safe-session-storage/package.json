@@ -1,6 +1,7 @@
 {
   "name": "safe-session-storage",
   "version": "1.0.0",
+  "type": "module",
   "description": "A secure wrapper for localStorage and sessionStorage with automatic encryption.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -9,7 +10,8 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "files": [
