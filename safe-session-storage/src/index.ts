@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import CryptoJS from 'crypto-js';
 
 type StorageType = 'local' | 'session' | 'async';
 
@@ -9,29 +10,23 @@ interface SafeStorageOptions {
 }
 
 /**
- * Simple obfuscation for storage values.
+ * Military-grade AES encryption for storage values.
  */
 export const simpleEncrypt = (text: string, key: string): string => {
-  const result = text.split('').map((char, i) => {
-    return String.fromCharCode(char.charCodeAt(0) ^ key.charCodeAt(i % key.length));
-  });
-  // Use a safer way to encode for all environments
-  return typeof btoa !== 'undefined' 
-    ? btoa(encodeURIComponent(result.join('')))
-    : Buffer.from(encodeURIComponent(result.join(''))).toString('base64');
+  try {
+    return CryptoJS.AES.encrypt(text, key).toString();
+  } catch (e) {
+    console.error('Encryption failed:', e);
+    return text;
+  }
 };
 
 export const simpleDecrypt = (encoded: string, key: string): string => {
   try {
-    const text = typeof atob !== 'undefined'
-      ? decodeURIComponent(atob(encoded))
-      : decodeURIComponent(Buffer.from(encoded, 'base64').toString());
-    
-    const result = text.split('').map((char, i) => {
-      return String.fromCharCode(char.charCodeAt(0) ^ key.charCodeAt(i % key.length));
-    });
-    return result.join('');
+    const bytes = CryptoJS.AES.decrypt(encoded, key);
+    return bytes.toString(CryptoJS.enc.Utf8);
   } catch (e) {
+    console.error('Decryption failed:', e);
     return '';
   }
 };
