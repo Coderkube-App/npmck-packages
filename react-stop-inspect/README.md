@@ -1,15 +1,15 @@
-# react-stop-inspect
+# React Stop Inspect
 
 A lightweight library to prevent browser code inspection and DevTools usage in React, Vite, Next.js, and Webpack applications. Supports both JavaScript and TypeScript.
 
 ## Features
 
-- 🚫 **Disable Right-Click**: Prevents the context menu from opening.
-- ⌨️ **Disable Shortcuts**: Blocks `F12`, `Ctrl+Shift+I`, `Ctrl+Shift+J`, `Ctrl+Shift+C`, and `Ctrl+U`.
-- 🐞 **Debugger Loop**: Automatically pauses execution if DevTools is opened.
-- 📺 **Console Protection**: Disables console logging in production.
-- 📏 **Resize Detection**: Detects if DevTools is opened via window resizing.
-- 🔌 **Plugin Support**: Works as a Vite plugin, Webpack plugin, or Next.js config wrapper.
+-  **Disable Right-Click**: Prevents the context menu from opening.
+-  **Disable Shortcuts**: Blocks `F12`, `Ctrl+Shift+I`, `Ctrl+Shift+J`, `Ctrl+Shift+C`, and `Ctrl+U`.
+-  **Debugger Loop**: Automatically pauses execution if DevTools is opened.
+-  **Console Protection**: Disables console logging in production.
+-  **Resize Detection**: Detects if DevTools is opened via window resizing.
+-  **Plugin Support**: Works as a Vite plugin, Webpack plugin, or Next.js config wrapper.
 
 ## Installation
 
@@ -195,6 +195,14 @@ initStopInspect({
 | `disableConsole` | `boolean` | `true` | Clear console or disable console logs. |
 | `detectResize` | `boolean` | `true` | Check for DevTools opening by window resize. |
 
+---
+
+## Contribution
+
+Feel free to fork and improve this project! Pull requests are welcome.
+
+---
+
 ## License
 
-MIT
+This project is licensed under the Apache-2.0 License.
