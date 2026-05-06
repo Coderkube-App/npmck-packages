@@ -4,11 +4,11 @@ A secure, lightweight wrapper for `localStorage`, `sessionStorage`, and `AsyncSt
 
 ## Features
 
-- 🔐 **Automatic Encryption**: Data is encrypted before being stored.
-- ⚛️ **React & React Native Support**: Hooks for both synchronous and asynchronous storage.
-- 🌐 **SSR Friendly**: Works perfectly with Next.js and other SSR frameworks.
-- 📦 **Zero External Dependencies**: Lightweight and fast.
-- 🛡️ **Type Safe**: Full TypeScript support.
+-  **Automatic Encryption**: Data is encrypted before being stored.
+-  **React & React Native Support**: Hooks for both synchronous and asynchronous storage.
+-  **SSR Friendly**: Works perfectly with Next.js and other SSR frameworks.
+-  **Zero External Dependencies**: Lightweight and fast.
+-  **Type Safe**: Full TypeScript support.
 
 ## Installation
 
@@ -89,6 +89,11 @@ When you store data in storage engines, it is usually stored in plain text. Anyo
 - `useAsyncSafeStorage(key, initialValue, options)`
 - `AsyncSafeStorage` class.
 
+
+## Contribution
+
+Feel free to fork and improve this project! Pull requests are welcome.
+
 ## License
 
-MIT
+This project is licensed under the Apache-2.0 License.
