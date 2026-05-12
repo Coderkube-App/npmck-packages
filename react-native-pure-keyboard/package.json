@@ -1,6 +1,6 @@
 {
   "name": "react-native-pure-keyboard",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A high-performance, zero-dependency, pure JS keyboard utility for React Native and Expo.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

@@ -1,6 +1,6 @@
 {
   "name": "bot-proof-storage",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Secure storage with behavioral bot detection and AES-256 encryption.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
