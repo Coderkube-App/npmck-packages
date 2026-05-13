@@ -1,0 +1,52 @@
+{
+  "name": "ai-shroud-ui",
+  "version": "1.0.0",
+  "description": "Anti-AI Scraper Component for protecting UI content from automated text extraction.",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./vanilla": {
+      "require": "./dist/vanilla.cjs",
+      "import": "./dist/vanilla.js",
+      "types": "./dist/vanilla.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.tsx src/vanilla.ts --format cjs,esm --dts --minify --clean",
+    "test": "vitest run",
+    "dev": "tsup src/index.tsx --format cjs,esm --watch --dts",
+    "lint": "tsc"
+  },
+  "keywords": [
+    "anti-ai",
+    "scraper-protection",
+    "privacy",
+    "content-protection",
+    "security",
+    "react",
+    "nextjs",
+    "adversarial"
+  ],
+  "author": "Antigravity",
+  "license": "MIT",
+  "devDependencies": {
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2",
+    "@types/node": "^20.11.16",
+    "react": ">=16.8.0",
+    "@types/react": "^18.2.0"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  }
+}
