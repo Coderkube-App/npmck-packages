@@ -1,6 +1,6 @@
 {
   "name": "ai-shroud-ui",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "Anti-AI Scraper Component for protecting UI content from automated text extraction.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -36,7 +36,7 @@
     "nextjs",
     "adversarial"
   ],
-  "author": "Antigravity",
+  "author": "",
   "license": "MIT",
   "devDependencies": {
     "tsup": "^8.0.2",
