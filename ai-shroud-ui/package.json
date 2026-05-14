@@ -2,19 +2,19 @@
   "name": "ai-shroud-ui",
   "version": "1.0.0",
   "description": "Anti-AI Scraper Component for protecting UI content from automated text extraction.",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     },
     "./vanilla": {
-      "require": "./dist/vanilla.cjs",
-      "import": "./dist/vanilla.js",
-      "types": "./dist/vanilla.d.ts"
+      "types": "./dist/vanilla.d.ts",
+      "import": "./dist/vanilla.mjs",
+      "require": "./dist/vanilla.js"
     }
   },
   "files": [
