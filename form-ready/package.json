@@ -1,6 +1,6 @@
 {
   "name": "form-ready",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Universal form validation and handling for React, Next.js, Vite, and vanilla JS.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -41,7 +41,7 @@
     "schema",
     "input"
   ],
-  "author": "Antigravity",
+  "author": "",
   "license": "MIT",
   "devDependencies": {
     "tsup": "^8.0.2",
