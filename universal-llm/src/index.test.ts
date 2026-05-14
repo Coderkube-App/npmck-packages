@@ -42,7 +42,7 @@ describe('UniversalLLM.chat', () => {
     const llm = new UniversalLLM({ provider: 'openai', apiKey: 'test-key' });
     const result = await llm.chat([{ role: 'user', content: 'Hi' }]);
 
-    expect(result).toBe('Hello from GPT');
+    expect(result.data).toBe('Hello from GPT');
     expect(mockFetch).toHaveBeenCalledOnce();
 
     const [url, init] = mockFetch.mock.calls[0];
@@ -60,7 +60,7 @@ describe('UniversalLLM.chat', () => {
       { role: 'user', content: 'Hi' }
     ]);
 
-    expect(result).toBe('Hello from Claude');
+    expect(result.data).toBe('Hello from Claude');
 
     const body = JSON.parse(mockFetch.mock.calls[0][1].body);
     // Anthropic should filter out system messages from the messages array
@@ -74,7 +74,7 @@ describe('UniversalLLM.chat', () => {
     const llm = new UniversalLLM({ provider: 'grok', apiKey: 'test-key' });
     const result = await llm.chat([{ role: 'user', content: 'Hi' }]);
 
-    expect(result).toBe('Hello from Grok');
+    expect(result.data).toBe('Hello from Grok');
     expect(mockFetch.mock.calls[0][0]).toBe('https://api.x.ai/v1/chat/completions');
   });
 
@@ -84,7 +84,7 @@ describe('UniversalLLM.chat', () => {
     const llm = new UniversalLLM({ provider: 'ollama' });
     const result = await llm.chat([{ role: 'user', content: 'Hi' }]);
 
-    expect(result).toBe('Hello from Llama');
+    expect(result.data).toBe('Hello from Llama');
     expect(mockFetch.mock.calls[0][0]).toBe('http://localhost:11434/api/chat');
 
     const body = JSON.parse(mockFetch.mock.calls[0][1].body);
@@ -152,7 +152,7 @@ describe('Retry logic', () => {
     const llm = new UniversalLLM({ provider: 'openai', apiKey: 'test', retries: 2, retryDelay: 10 });
     const result = await llm.chat([{ role: 'user', content: 'Hi' }]);
 
-    expect(result).toBe('Recovered');
+    expect(result.data).toBe('Recovered');
     expect(mockFetch).toHaveBeenCalledTimes(2);
   });
 
@@ -194,8 +194,8 @@ describe('Caching', () => {
     const result1 = await llm.chat(messages);
     const result2 = await llm.chat(messages);
 
-    expect(result1).toBe('Cached result');
-    expect(result2).toBe('Cached result');
+    expect(result1.data).toBe('Cached result');
+    expect(result2.data).toBe('Cached result');
     expect(mockFetch).toHaveBeenCalledOnce(); // Only 1 API call
   });
 
@@ -210,8 +210,8 @@ describe('Caching', () => {
     const r1 = await llm.chat(messages);
     const r2 = await llm.chat(messages);
 
-    expect(r1).toBe('First');
-    expect(r2).toBe('Second');
+    expect(r1.data).toBe('First');
+    expect(r2.data).toBe('Second');
     expect(mockFetch).toHaveBeenCalledTimes(2);
   });
 
@@ -227,7 +227,7 @@ describe('Caching', () => {
     llm.clearCache();
     const result = await llm.chat(messages);
 
-    expect(result).toBe('After');
+    expect(result.data).toBe('After');
     expect(mockFetch).toHaveBeenCalledTimes(2);
   });
 });
@@ -261,7 +261,7 @@ describe('Middleware hooks', () => {
     const llm = new UniversalLLM({ provider: 'openai', apiKey: 'test', onResponse });
     const result = await llm.chat([{ role: 'user', content: 'Hi' }]);
 
-    expect(result).toBe('RAW RESPONSE');
+    expect(result.data).toBe('RAW RESPONSE');
     expect(onResponse).toHaveBeenCalledWith('raw response');
   });
 });
@@ -287,8 +287,8 @@ describe('Structured output', () => {
       prompt: 'Extract info from: Alice is 30 years old.',
     });
 
-    expect(result.name).toBe('Alice');
-    expect(result.age).toBe(30);
+    expect(result.data.name).toBe('Alice');
+    expect(result.data.age).toBe(30);
   });
 
   it('should handle markdown-fenced JSON response', async () => {
@@ -304,7 +304,7 @@ describe('Structured output', () => {
       prompt: 'What color is the sky?',
     });
 
-    expect(result.color).toBe('blue');
+    expect(result.data.color).toBe('blue');
   });
 
   it('should throw when response does not match schema', async () => {

@@ -51,6 +51,16 @@ export interface CacheEntry {
   expiresAt: number;
 }
 
+export interface LLMResult<T> {
+  data: T;
+  metadata: {
+    durationMs: number;
+    provider: ModelProvider;
+    model: string;
+    cached: boolean;
+  };
+}
+
 // ──────────────────────────────────────────────
 // 2. ZOD → JSON SCHEMA CONVERTER
 //    (No reliance on Zod internals)
