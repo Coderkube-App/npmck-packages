@@ -1,0 +1,58 @@
+{
+  "name": "form-ready",
+  "version": "1.0.0",
+  "description": "Universal form validation and handling for React, Next.js, Vite, and vanilla JS.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.mjs",
+      "require": "./dist/react.js"
+    },
+    "./vanilla": {
+      "types": "./dist/vanilla.d.ts",
+      "import": "./dist/vanilla.mjs",
+      "require": "./dist/vanilla.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts src/react.ts src/vanilla.ts --format cjs,esm --dts --minify --clean",
+    "test": "vitest run",
+    "dev": "tsup src/index.ts --format cjs,esm --watch --dts",
+    "lint": "tsc"
+  },
+  "keywords": [
+    "form",
+    "validation",
+    "react",
+    "nextjs",
+    "vanilla",
+    "zod",
+    "schema",
+    "input"
+  ],
+  "author": "Antigravity",
+  "license": "MIT",
+  "devDependencies": {
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2",
+    "@types/node": "^20.11.16",
+    "react": "^18.2.0",
+    "@types/react": "^18.2.0"
+  },
+  "peerDependencies": {
+    "zod": ">=3.0.0",
+    "react": ">=16.8.0"
+  }
+}
