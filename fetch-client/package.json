@@ -1,5 +1,5 @@
 {
-  "name": "@coderkube/fetch-client",
+  "name": "@coderkube/universal-api-hooks",
   "version": "1.0.0",
   "description": "Cross-platform API client for Next.js, React, React Native, and Vanilla.js with interceptors, retries, and TypeScript support.",
   "main": "./dist/index.js",
@@ -39,15 +39,21 @@
   "keywords": [
     "api",
     "client",
+    "universal",
+    "universal-api",
+    "seo",
     "http",
     "fetch",
     "axios",
     "react",
+    "hooks",
     "nextjs",
     "react-native",
     "vanilla",
     "interceptor",
-    "request"
+    "request",
+    "typescript",
+    "retry"
   ],
   "author": "",
   "license": "MIT",
