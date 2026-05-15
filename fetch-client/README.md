@@ -1,4 +1,4 @@
-# @coderkube/universal-api-hooks
+# universal-api-hooks
 
 Cross-platform API client for Next.js, React, React Native, and Vanilla.js with interceptors, retries, and full TypeScript support.
 
@@ -17,7 +17,7 @@ Cross-platform API client for Next.js, React, React Native, and Vanilla.js with 
 ## Installation
 
 ```bash
-npm install @coderkube/universal-api-hooks
+npm install universal-api-hooks
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ npm install @coderkube/universal-api-hooks
 ### Vanilla JS / Node.js
 
 ```javascript
-import { createApiClient, api } from '@coderkube/universal-api-hooks';
+import { createApiClient, api } from 'universal-api-hooks';
 
 // Create client with base URL
 const client = createApiClient({
@@ -60,7 +60,7 @@ const response = await client.delete('/users/1');
 ### React
 
 ```tsx
-import { useApi, useGet, usePost, useMutation, ApiProvider } from '@coderkube/universal-api-hooks/react';
+import { useApi, useGet, usePost, useMutation, ApiProvider } from 'universal-api-hooks/react';
 
 // Wrap your app with provider
 function App() {
@@ -107,7 +107,7 @@ function ManualFetch() {
 ### React Native
 
 ```javascript
-import { createApiClient, api, useApi } from '@coderkube/universal-api-hooks/react-native';
+import { createApiClient, api, useApi } from 'universal-api-hooks/react-native';
 
 const client = createApiClient({
   baseURL: 'https://api.example.com',
