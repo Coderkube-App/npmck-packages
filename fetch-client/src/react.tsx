@@ -1,7 +1,13 @@
 // React Hooks for Universal API Client
 
-import { createApiClient, RequestConfig, ApiResponse, HttpMethod, BodyType } from './index';
-import { useState, useCallback, useEffect, useRef } from 'react';
+import {
+  createApiClient,
+  RequestConfig,
+  ApiResponse,
+  HttpMethod,
+  BodyType,
+} from "./index";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 
 export interface UseApiOptions extends RequestConfig {
   immediate?: boolean;
@@ -24,7 +30,7 @@ export interface UseApiMutationOptions<T> {
   body?: unknown;
   bodyType?: BodyType;
   token?: string;
-  tokenType?: 'Bearer' | 'APIKey' | 'Custom';
+  tokenType?: "Bearer" | "APIKey" | "Custom";
   tokenPrefix?: string;
   params?: Record<string, string | number | boolean>;
   headers?: Record<string, string>;
@@ -47,7 +53,7 @@ export interface UseApiMutationReturn<T> {
 }
 
 function getAxiosErrorMessage(error: unknown): string {
-  if (error && typeof error === 'object' && 'message' in error) {
+  if (error && typeof error === "object" && "message" in error) {
     return String((error as { message: unknown }).message);
   }
   return String(error);
@@ -55,18 +61,14 @@ function getAxiosErrorMessage(error: unknown): string {
 
 export function useApi<T = unknown>(
   url: string,
-  method: HttpMethod = 'GET',
-  options: UseApiOptions = {}
+  method: HttpMethod = "GET",
+  options: UseApiOptions = {},
 ): UseApiReturn<T> {
-  const {
-    immediate = false,
-    ...clientConfig
-  } = options;
-
-  const client = createApiClient(clientConfig);
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
 
   const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState(immediate);
+  const [loading, setLoading] = useState(options.immediate || false);
   const [error, setError] = useState<Error | null>(null);
   const [response, setResponse] = useState<ApiResponse<T> | null>(null);
   const mountedRef = useRef(true);
@@ -78,31 +80,40 @@ export function useApi<T = unknown>(
     };
   }, []);
 
-  const execute = useCallback(async (config?: RequestConfig): Promise<ApiResponse<T> | undefined> => {
-    if (!mountedRef.current) return;
+  const execute = useCallback(
+    async (config?: RequestConfig): Promise<ApiResponse<T> | undefined> => {
+      if (!mountedRef.current) return;
 
-    setLoading(true);
-    setError(null);
+      setLoading(true);
+      setError(null);
 
-    try {
-      const res = await client.request<T>(method, url, { ...clientConfig, ...config });
+      const { immediate, ...clientConfig } = optionsRef.current;
+      const client = createApiClient(clientConfig);
 
-      if (mountedRef.current) {
-        setData(res.data);
-        setResponse(res);
-        setLoading(false);
+      try {
+        const res = await client.request<T>(method, url, {
+          ...clientConfig,
+          ...config,
+        });
+
+        if (mountedRef.current) {
+          setData(res.data);
+          setResponse(res);
+          setLoading(false);
+        }
+
+        return res;
+      } catch (err) {
+        if (mountedRef.current) {
+          const error = new Error(getAxiosErrorMessage(err));
+          setError(error);
+          setLoading(false);
+        }
+        return undefined;
       }
-
-      return res;
-    } catch (err) {
-      if (mountedRef.current) {
-        const error = new Error(getAxiosErrorMessage(err));
-        setError(error);
-        setLoading(false);
-      }
-      return undefined;
-    }
-  }, [client, method, url, clientConfig]);
+    },
+    [method, url],
+  );
 
   const reset = useCallback(() => {
     setData(null);
@@ -112,42 +123,47 @@ export function useApi<T = unknown>(
   }, []);
 
   useEffect(() => {
-    if (immediate) {
+    if (options.immediate) {
       execute();
     }
-  }, [execute, immediate]);
+  }, [execute, options.immediate]);
 
   return { data, loading, error, response, execute, reset };
 }
 
 export function useGet<T = unknown>(url: string, options: UseApiOptions = {}) {
-  return useApi<T>(url, 'GET', options);
+  return useApi<T>(url, "GET", options);
 }
 
 export function usePost<T = unknown>(url: string, options: UseApiOptions = {}) {
-  return useApi<T>(url, 'POST', options);
+  return useApi<T>(url, "POST", options);
 }
 
 export function usePut<T = unknown>(url: string, options: UseApiOptions = {}) {
-  return useApi<T>(url, 'PUT', options);
+  return useApi<T>(url, "PUT", options);
 }
 
-export function usePatch<T = unknown>(url: string, options: UseApiOptions = {}) {
-  return useApi<T>(url, 'PATCH', options);
+export function usePatch<T = unknown>(
+  url: string,
+  options: UseApiOptions = {},
+) {
+  return useApi<T>(url, "PATCH", options);
 }
 
-export function useDelete<T = unknown>(url: string, options: UseApiOptions = {}) {
-  return useApi<T>(url, 'DELETE', options);
+export function useDelete<T = unknown>(
+  url: string,
+  options: UseApiOptions = {},
+) {
+  return useApi<T>(url, "DELETE", options);
 }
 
 export function useMutation<T = unknown>(
   url: string,
-  method: HttpMethod = 'POST',
-  options: UseApiMutationOptions<T> = {}
+  method: HttpMethod = "POST",
+  options: UseApiMutationOptions<T> = {},
 ): UseApiMutationReturn<T> {
-  const { onSuccess, onError, ...clientConfig } = options;
-
-  const client = createApiClient(clientConfig);
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
 
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
@@ -162,47 +178,59 @@ export function useMutation<T = unknown>(
     };
   }, []);
 
-  const mutate = useCallback(async (config?: RequestConfig): Promise<ApiResponse<T> | undefined> => {
-    if (!mountedRef.current) return;
+  const mutate = useCallback(
+    async (config?: RequestConfig): Promise<ApiResponse<T> | undefined> => {
+      if (!mountedRef.current) return;
 
-    setLoading(true);
-    setError(null);
+      setLoading(true);
+      setError(null);
 
-    try {
-      const res = await client.request<T>(method, url, { ...clientConfig, ...config });
+      const { onSuccess, onError, ...clientConfig } = optionsRef.current;
+      const client = createApiClient(clientConfig);
 
-      if (mountedRef.current) {
-        setData(res.data);
-        setResponse(res);
-        setLoading(false);
+      try {
+        const res = await client.request<T>(method, url, {
+          ...clientConfig,
+          ...config,
+        });
 
-        if (onSuccess) {
-          onSuccess(res.data, res);
+        if (mountedRef.current) {
+          setData(res.data);
+          setResponse(res);
+          setLoading(false);
+
+          if (onSuccess) {
+            onSuccess(res.data, res);
+          }
         }
-      }
 
-      return res;
-    } catch (err) {
-      if (mountedRef.current) {
-        const error = new Error(getAxiosErrorMessage(err));
-        setError(error);
-        setLoading(false);
+        return res;
+      } catch (err) {
+        if (mountedRef.current) {
+          const error = new Error(getAxiosErrorMessage(err));
+          setError(error);
+          setLoading(false);
 
-        if (onError) {
-          onError(error, response || undefined);
+          if (onError) {
+            onError(error, undefined);
+          }
         }
+        return undefined;
       }
-      return undefined;
-    }
-  }, [client, method, url, clientConfig, onSuccess, onError, response]);
+    },
+    [method, url],
+  );
 
-  const mutateAsync = useCallback(async (config?: RequestConfig): Promise<ApiResponse<T>> => {
-    const result = await mutate(config);
-    if (!result) {
-      throw new Error('Mutation failed');
-    }
-    return result;
-  }, [mutate]);
+  const mutateAsync = useCallback(
+    async (config?: RequestConfig): Promise<ApiResponse<T>> => {
+      const result = await mutate(config);
+      if (!result) {
+        throw new Error("Mutation failed");
+      }
+      return result;
+    },
+    [mutate],
+  );
 
   const reset = useCallback(() => {
     setData(null);
@@ -218,7 +246,7 @@ export function useMutation<T = unknown>(
 export interface ApiProviderConfig {
   baseURL?: string;
   token?: string;
-  tokenType?: 'Bearer' | 'APIKey' | 'Custom';
+  tokenType?: "Bearer" | "APIKey" | "Custom";
   tokenPrefix?: string;
   defaultHeaders?: Record<string, string>;
   timeout?: number;
@@ -234,7 +262,7 @@ const ApiContext = React.createContext<ApiContextValue | null>(null);
 
 export function ApiProvider({
   children,
-  config
+  config,
 }: {
   children: React.ReactNode;
   config: ApiProviderConfig;
@@ -259,9 +287,8 @@ export function ApiProvider({
 export function useApiClient() {
   const context = React.useContext(ApiContext);
   if (!context) {
-    throw new Error('useApiClient must be used within ApiProvider');
+    throw new Error("useApiClient must be used within ApiProvider");
   }
   return context.client;
 }
 
-import React from 'react';

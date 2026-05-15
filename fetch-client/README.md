@@ -17,7 +17,7 @@ Cross-platform API client for Next.js, React, React Native, and Vanilla.js with 
 ## Installation
 
 ```bash
-npm install universal-api
+npm install @coderkube/fetch-client
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ npm install universal-api
 ### Vanilla JS / Node.js
 
 ```javascript
-import { createApiClient, api } from 'universal-api';
+import { createApiClient, api } from '@coderkube/fetch-client';
 
 // Create client with base URL
 const client = createApiClient({
@@ -60,7 +60,7 @@ const response = await client.delete('/users/1');
 ### React
 
 ```tsx
-import { useApi, useGet, usePost, useMutation, ApiProvider } from 'universal-api/react';
+import { useApi, useGet, usePost, useMutation, ApiProvider } from '@coderkube/fetch-client/react';
 
 // Wrap your app with provider
 function App() {
@@ -107,7 +107,7 @@ function ManualFetch() {
 ### React Native
 
 ```javascript
-import { createApiClient, api } from 'universal-api/react-native';
+import { createApiClient, api } from '@coderkube/fetch-client/react-native';
 
 const client = createApiClient({
   baseURL: 'https://api.example.com',

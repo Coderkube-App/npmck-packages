@@ -1,7 +1,7 @@
 // React Native implementation for Universal API Client
-// Uses fetch API (available in React Native)
-
+import { createApiClient } from './index';
 export { createApiClient, api } from './index';
+export * from './react';
 
 // Re-export types
 export type {
@@ -16,7 +16,7 @@ export type {
   ErrorInterceptor,
 } from './index';
 
-// Additional React Native helpers can be added here
+// Additional React Native helpers
 export interface UseNetworkState {
   isConnected: boolean | null;
 }
@@ -27,13 +27,11 @@ export async function checkNetworkStatus(): Promise<boolean> {
   return true;
 }
 
-export function createRNApiClient(config: Parameters<typeof import('./index').createApiClient>[0]) {
-  return import('./index').then(({ createApiClient }) =>
-    createApiClient({
-      timeout: 30000,
-      retries: 3,
-      retryDelay: 1000,
-      ...config,
-    })
-  );
+export function createRNApiClient(config: import('./index').RequestConfig = {}) {
+  return createApiClient({
+    timeout: 30000,
+    retries: 3,
+    retryDelay: 1000,
+    ...config,
+  });
 }
