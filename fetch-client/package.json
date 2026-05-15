@@ -1,5 +1,5 @@
 {
-  "name": "universal-api-fetch-client",
+  "name": "@coderkube/fetch-client",
   "version": "1.0.0",
   "description": "Cross-platform API client for Next.js, React, React Native, and Vanilla.js with interceptors, retries, and TypeScript support.",
   "main": "./dist/index.js",

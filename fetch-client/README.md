@@ -1,4 +1,4 @@
-# universal-api
+# @coderkube/fetch-client
 
 Cross-platform API client for Next.js, React, React Native, and Vanilla.js with interceptors, retries, and full TypeScript support.
 
