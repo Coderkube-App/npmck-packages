@@ -7,6 +7,7 @@ A highly customizable, paginated async search dropdown for React Native (Expo an
 - **Async Search** - Load options dynamically based on search query
 - **Pagination** - Built-in infinite scroll support for loading more results
 - **Debounce** - Configurable debounce to prevent excessive API calls
+- **Android Touch & Scroll Perfected** - Native flow-based rendering on Android to prevent touch-clipping and parent ScrollView scroll-gesture conflicts
 - **Customizable** - Full control over styling and rendering
 - **Imperative Controls** - Focus, blur, clear, and set search text via ref
 - **TypeScript** - Full TypeScript support with generic types
@@ -94,6 +95,9 @@ export default function App() {
 | `renderFooter` | `() => ReactElement` | `undefined` | Custom footer component |
 | `renderHeader` | `() => ReactElement` | `undefined` | Custom header component |
 | `closeOnSelect` | `boolean` | `true` | Close dropdown on selection |
+| `statusBarTranslucent` | `boolean` | `false` | Adjusts menu spacing under status bar |
+| `onFocus` | `() => void` | `undefined` | Callback when search input is focused |
+| `onBlur` | `() => void` | `undefined` | Callback when search input is blurred |
 
 ### PaginatedSearchDropdownHandle
 
