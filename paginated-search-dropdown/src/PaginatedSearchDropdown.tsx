@@ -40,6 +40,9 @@ export interface PaginatedSearchDropdownProps<T, Additional = unknown> {
   
   // Controls
   closeOnSelect?: boolean;
+  statusBarTranslucent?: boolean;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 export interface PaginatedSearchDropdownHandle {
@@ -47,6 +50,7 @@ export interface PaginatedSearchDropdownHandle {
   blur: () => void;
   clear: () => void;
   setSearch: (text: string) => void;
+  close: () => void;
 }
 
 const PaginatedSearchDropdownInner = <T extends unknown, Additional = unknown>(
@@ -70,12 +74,40 @@ const PaginatedSearchDropdownInner = <T extends unknown, Additional = unknown>(
     renderFooter,
     renderHeader,
     closeOnSelect = true,
+    statusBarTranslucent = false,
   } = props;
 
   const [isMenuVisible, setIsMenuVisible] = useState(false);
-  const [inputLayout, setInputLayout] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const inputRef = React.useRef<TextInput>(null);
   const containerRef = React.useRef<View>(null);
+  const blurTimeoutRef = React.useRef<any>(null);
+
+  React.useEffect(() => {
+    return () => {
+      if (blurTimeoutRef.current) {
+        clearTimeout(blurTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleFocus = () => {
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current);
+    }
+    setIsMenuVisible(true);
+    if (props.onFocus) {
+      props.onFocus();
+    }
+  };
+
+  const handleBlur = () => {
+    blurTimeoutRef.current = setTimeout(() => {
+      setIsMenuVisible(false);
+      if (props.onBlur) {
+        props.onBlur();
+      }
+    }, 200);
+  };
 
   const {
     search,
@@ -96,14 +128,10 @@ const PaginatedSearchDropdownInner = <T extends unknown, Additional = unknown>(
     blur: () => inputRef.current?.blur(),
     clear: () => setSearch(''),
     setSearch: (text: string) => setSearch(text),
+    close: () => setIsMenuVisible(false),
   }));
 
-  const handleOpenMenu = () => {
-    containerRef.current?.measure((x, y, width, height, pageX, pageY) => {
-      setInputLayout({ x: pageX, y: pageY, width, height });
-      setIsMenuVisible(true);
-    });
-  };
+
 
   const handleSelect = (item: T) => {
     onSelect(item);
@@ -137,6 +165,7 @@ const PaginatedSearchDropdownInner = <T extends unknown, Additional = unknown>(
 
     return (
       <FlatList
+        style={{ flexGrow: 0, flexShrink: 1 }}
         data={options}
         keyExtractor={keyExtractor}
         renderItem={({ item, index }: { item: T; index: number }) => (
@@ -169,8 +198,16 @@ const PaginatedSearchDropdownInner = <T extends unknown, Additional = unknown>(
     );
   };
 
+  const menuStyles = Platform.OS === 'android'
+    ? [styles.menuAndroid, menuStyle]
+    : [styles.menu, menuStyle];
+
   return (
-    <View ref={containerRef} style={[styles.container, containerStyle]}>
+    <View
+      ref={containerRef}
+      style={[styles.container, containerStyle]}
+      collapsable={false}
+    >
       <TextInput
         ref={inputRef}
         style={[styles.input, inputStyle]}
@@ -178,53 +215,21 @@ const PaginatedSearchDropdownInner = <T extends unknown, Additional = unknown>(
         value={search}
         onChangeText={(text: string) => {
           setSearch(text);
-          if (!isMenuVisible) handleOpenMenu();
+          if (blurTimeoutRef.current) {
+            clearTimeout(blurTimeoutRef.current);
+          }
+          if (!isMenuVisible) {
+            setIsMenuVisible(true);
+          }
         }}
-        onFocus={handleOpenMenu}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
       />
 
       {isMenuVisible && (
-        <>
-          {/* Backdrop (iOS/Web) or Modal (Android) */}
-          {Platform.OS === 'android' ? (
-            <Modal
-              transparent
-              visible={isMenuVisible}
-              animationType="none"
-              onRequestClose={() => setIsMenuVisible(false)}
-            >
-              <TouchableOpacity
-                style={styles.modalBackdrop}
-                activeOpacity={1}
-                onPress={() => setIsMenuVisible(false)}
-              >
-                <View style={[
-                  styles.menu, 
-                  menuStyle, 
-                  styles.androidMenu,
-                  { 
-                    top: inputLayout.y + inputLayout.height - (Platform.OS === 'android' ? (StatusBar.currentHeight || 0) : 0),
-                    left: inputLayout.x,
-                    width: inputLayout.width 
-                  }
-                ]}>
-                  {renderDropdownContent()}
-                </View>
-              </TouchableOpacity>
-            </Modal>
-          ) : (
-            <>
-              <TouchableOpacity
-                style={styles.backdrop}
-                activeOpacity={1}
-                onPress={() => setIsMenuVisible(false)}
-              />
-              <View style={[styles.menu, menuStyle]}>
-                {renderDropdownContent()}
-              </View>
-            </>
-          )}
-        </>
+        <View style={menuStyles}>
+          {renderDropdownContent()}
+        </View>
       )}
     </View>
   );
@@ -244,21 +249,12 @@ const styles = StyleSheet.create({
     width: '100%',
     zIndex: 1000,
   },
-  backdrop: {
-    position: 'absolute',
-    top: -1000,
-    left: -1000,
-    right: -1000,
-    bottom: -1000,
-    zIndex: 999,
-  },
   modalBackdrop: {
     flex: 1,
     backgroundColor: 'transparent',
   },
   androidMenu: {
     position: 'absolute',
-    // Position will be handled via calculated layout
   },
   input: {
     height: 48,
@@ -273,7 +269,7 @@ const styles = StyleSheet.create({
   },
   menu: {
     position: 'absolute',
-    top: 48, // Adjusted from 52 to be flush with the input height
+    top: 48,
     left: 0,
     right: 0,
     maxHeight: 300,
@@ -282,17 +278,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E2E8F0',
     zIndex: 1001,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
-      },
-      android: {
-        elevation: 8, // Increased elevation for Android
-      },
-    }),
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+  },
+  menuAndroid: {
+    maxHeight: 300,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    elevation: 8,
+    marginTop: 4,
   },
   item: {
     paddingVertical: 12,

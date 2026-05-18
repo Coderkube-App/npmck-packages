@@ -40,3 +40,6 @@ demos/
 temp_auto_push.bat
 temp_interactive_push.bat
 .gitignore
+# Demos (ignore all except TestKeyboardBare)
+demos/*
+!demos/TestKeyboardBare/
