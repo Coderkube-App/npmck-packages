@@ -124,14 +124,45 @@ export default function ActionButton() {
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | `undefined` | The child elements inside the card. |
-| `intensity` | `number` | `20` | Blur amount ($0$ to $100$) mapped to iOS Blur and Android opacity. |
+| `children` | `React.ReactNode` | `undefined` | The child elements inside the card. |
+| `intensity` | `number` | `20` | Blur amount (0 to 100) mapped to iOS Blur and Android opacity. |
 | `tint` | `'light' \| 'dark' \| 'none'` | `'light'` | Theme color styling. |
-| `borderRadius` | `number` | `16` | Border radius. |
-| `borderWidth` | `number` | `1` | Border width. |
+| `borderRadius` | `number` | `16` | Border radius of the card. |
+| `borderWidth` | `number` | `1` | Border width of the card. |
 | `borderColor` | `string` | *Computed* | Semi-translucent custom border color. |
 | `shadowOpacity` | `number` | `0.1` | Shadow strength baseline. |
-| `style` | `ViewStyle` | `undefined` | Style overrides for the outer container. |
+| `elevation` | `number` | `4` (or `0` if `tint="none"`) | Android-specific elevation shadow. |
+| `style` | `StyleProp<ViewStyle>` | `undefined` | Style overrides for the outer container. |
+
+---
+
+### `GlassmorphicInput` Props
+
+*Extends standard React Native [TextInputProps](https://reactnative.dev/docs/textinput#props).*
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `intensity` | `number` | `15` | Blur amount (0 to 100) mapped to iOS Blur and Android opacity. |
+| `tint` | `'light' \| 'dark' \| 'none'` | `'light'` | Theme color styling. |
+| `borderRadius` | `number` | `12` | Border radius of the input container. |
+| `containerStyle` | `StyleProp<ViewStyle>` | `undefined` | Style overrides for the wrapping card/container. |
+| `inputStyle` | `StyleProp<TextStyle>` | `undefined` | Style overrides for the inner `TextInput` component. |
+
+---
+
+### `GlassmorphicButton` Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `title` | `string` | *Required* | Button display text. |
+| `onPress` | `() => void` | `undefined` | Callback fired when the button is pressed. |
+| `intensity` | `number` | `30` | Blur amount (0 to 100) mapped to iOS Blur and Android opacity. |
+| `tint` | `'light' \| 'dark' \| 'none'` | `'light'` | Theme color styling. |
+| `borderRadius` | `number` | `12` | Border radius of the button. |
+| `loading` | `boolean` | `false` | When true, renders an `ActivityIndicator` in place of the text. |
+| `disabled` | `boolean` | `false` | When true, disables interactions and reduces opacity. |
+| `containerStyle` | `StyleProp<ViewStyle>` | `undefined` | Style overrides for the button card/container. |
+| `textStyle` | `StyleProp<TextStyle>` | `undefined` | Style overrides for the button text label. |
 
 ---
 

@@ -23,7 +23,7 @@
     "frosted-glass",
     "components"
   ],
-  "author": "CoderKube",
+  "author": "",
   "license": "MIT",
   "peerDependencies": {
     "react": ">=16.8.0",
