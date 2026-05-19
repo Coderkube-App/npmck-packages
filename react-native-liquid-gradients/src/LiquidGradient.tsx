@@ -167,7 +167,6 @@ const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     overflow: 'hidden',
-    zIndex: -999,
   },
   blobContainer: {
     position: 'absolute',
