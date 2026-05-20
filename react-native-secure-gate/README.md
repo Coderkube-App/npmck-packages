@@ -25,6 +25,15 @@ or
 yarn add react-native-secure-gate expo-local-authentication
 ```
 
+### ⚠️ Note for Bare React Native Projects (Non-Expo)
+If you are integrating this into a bare React Native project, you **must** also install the core Expo module runtime to support biometrics:
+
+```bash
+npm install expo expo-modules-core
+# For iOS, remember to update cocoapods
+cd ios && pod install
+```
+
 ---
 
 ## Usage
