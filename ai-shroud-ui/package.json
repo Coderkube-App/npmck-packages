@@ -21,9 +21,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.tsx src/vanilla.ts --format cjs,esm --dts --minify --clean",
+    "build": "node init && tsup src/index.tsx src/vanilla.ts --format cjs,esm --dts --minify --clean",
     "test": "vitest run",
-    "dev": "tsup src/index.tsx --format cjs,esm --watch --dts",
+    "dev": "node init && tsup src/index.tsx --format cjs,esm --watch --dts",
     "lint": "tsc"
   },
   "keywords": [

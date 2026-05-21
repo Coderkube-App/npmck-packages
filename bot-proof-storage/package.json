@@ -7,8 +7,8 @@
   "types": "./dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --minify --clean",
-    "dev": "tsup src/index.ts --format cjs,esm --watch --dts",
+    "build": "node init && tsup src/index.ts --format cjs,esm --dts --minify --clean",
+    "dev": "node init && tsup src/index.ts --format cjs,esm --watch --dts",
     "test": "vitest run"
   },
   "dependencies": {
